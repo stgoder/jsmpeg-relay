@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="nav">
+    <a th:href="@{/}" th:class="${tab} == 'index' ? 'tab-active' : 'tab'">index</a> |
+    <a th:href="@{/pusher/}" th:class="${tab} == 'pusher' ? 'tab-active' : 'tab'">pusher</a> |
+    <a th:href="@{/player/}" th:class="${tab} == 'player' ? 'tab-active' : 'tab'">player</a>
+</div>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head::head"></head>
+<body>
+<div th:include="common/nav::nav" class="tabs"></div>
+<div class="content">
+    <form th:action="@{/pusher/startAndPut}" method="post">
+        <table>
+            <tr>
+                <td>
+                    <input type="text" name="streamId" required="required" placeholder="streamId">
+                </td>
+                <td>streamId</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="source" required="required" placeholder="source">
+                </td>
+                <td>
+                    <div>rtsp://192.168.1.136/81</div>
+                    <div>/home/stgoder/5e016b8ec94c20126e69f67a.mp4</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="keepAlive">
+                        <option value="true" selected>true</option>
+                        <option value="false">false</option>
+                    </select>
+                </td>
+                <td>boolean keep alive</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="cancelAfterSeconds" placeholder="cancelAfterSeconds">
+                </td>
+                <td>cancel after ? seconds</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit">start</button>
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div class="content">
+    <table>
+        <tr>
+            <th>streamId</th>
+            <th>source</th>
+            <th>keepAlive</th>
+            <th>cancelAfterSeconds</th>
+            <th>birthTime</th>
+            <th>upTime</th>
+            <th>stopAndRemove</th>
+        </tr>
+        <tr th:each="pusher : ${pushers}">
+            <td><a th:href="@{/pusher/play-jsmpeg/} + ${pusher.streamId}" th:text="${pusher.streamId}"
+                   target="_blank"></a></td>
+            <td th:text="${pusher.source}"></td>
+            <td th:text="${pusher.keepAlive}"></td>
+            <td th:text="${pusher.cancelAfterSeconds}"></td>
+            <td th:text="${#dates.format(pusher.birthTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${#dates.format(pusher.upTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <form th:action="@{/pusher/stopAndRemove}" method="post">
+                    <input type="hidden" name="streamId" th:value="${pusher.streamId}">
+                    <button type="submit">X</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
