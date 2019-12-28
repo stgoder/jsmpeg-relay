@@ -39,7 +39,7 @@ public class PlayerGroup {
         channelGroup.writeAndFlush(frame);
     }
 
-    public void destory() {
+    public void destroy() {
         if (channelGroup == null || channelGroup.isEmpty()) {
             return;
         }

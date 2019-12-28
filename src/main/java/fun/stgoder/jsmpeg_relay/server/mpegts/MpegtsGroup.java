@@ -44,7 +44,7 @@ public class MpegtsGroup {
         channelGroup.writeAndFlush(frame);
     }
 
-    public static void destory() {
+    public static void destroy() {
         if (channelGroup == null || channelGroup.isEmpty()) {
             return;
         }

@@ -44,11 +44,11 @@ public class PlayerGroups {
         }
     }
 
-    public static void destory(String streamId) {
+    public static void destroy(String streamId) {
         PlayerGroup playerGroup = playerGroupMap.get(streamId);
         if (playerGroup == null)
             return;
-        playerGroup.destory();
+        playerGroup.destroy();
     }
 
     public static void closeAndRemove(String channelId) {
