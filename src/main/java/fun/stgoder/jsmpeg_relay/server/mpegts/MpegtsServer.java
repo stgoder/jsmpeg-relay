@@ -4,6 +4,7 @@ import fun.stgoder.jsmpeg_relay.common.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -33,11 +34,20 @@ public class MpegtsServer {
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new MpegtsChannelInitializer());
+        if (Epoll.isAvailable())
+            serverBootstrap.option(EpollChannelOption.SO_REUSEPORT, true);
         this.port = port;
     }
 
     public MpegtsServer start() throws InterruptedException {
-        serverBootstrap.bind(port).sync();
+        if (Epoll.isAvailable()) {
+            int availableProcessors = Runtime.getRuntime().availableProcessors();
+            for (int i = 0; i < availableProcessors; i++) {
+                serverBootstrap.bind(port).sync();
+            }
+        } else {
+            serverBootstrap.bind(port).sync();
+        }
         System.out.println("mpegts server start port: " + Constants.MPEGTS_SERVER_PORT);
         return this;
     }
