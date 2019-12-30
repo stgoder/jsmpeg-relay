@@ -5,9 +5,9 @@
 <div th:include="common/nav::nav" class="tabs"></div>
 <div class="content">
     <p>jsmpeg relay & mpegts server</p>
-    <p>relay server port: 10017</p>
-    <p>mpegts server port: 10018</p>
-    <p>http api port: 10019</p>
+    <p>relay server port: [[${relayPort}]]</p>
+    <p>mpegts server port: [[${mpegtsPort}]]</p>
+    <p>http api port: [[${apiPort}]]</p>
 </div>
 </body>
 </html>

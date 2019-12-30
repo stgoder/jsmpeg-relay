@@ -22,7 +22,7 @@ public class Constants {
         Yaml yaml = new Yaml();
         Map base = yaml.loadAs(Constants.class.getResourceAsStream("/application.yml"), Map.class);
         Map server = (Map) base.get("server");
-        SERVER_PORT = (int) server.getOrDefault("port", "10014");
+        SERVER_PORT = (int) server.getOrDefault("port", "10019");
         Map server_servlet = (Map) server.get("servlet");
         SERVER_SERVLET_CONTEXT_PATH = (String) server_servlet.getOrDefault("context-path", "/psmgr");
 
