@@ -3,7 +3,7 @@ pid=`ps -ef | grep "jsmpeg-relay-1.0-SNAPSHOT.jar" | grep -v grep | awk '{print 
 if [ "$pid" != "" ];then
   echo "already start pid: $pid"
 else
-  `nohup java -jar psmgr-1.0-SNAPSHOT.jar >/dev/null 2>&1 &`
+  `nohup java -jar jsmpeg-relay-1.0-SNAPSHOT.jar >/dev/null 2>&1 &`
   pid=`ps -ef | grep "jsmpeg-relay-1.0-SNAPSHOT.jar" | grep -v grep | awk '{print $2}'`
   echo $pid
 fi
