@@ -68,7 +68,7 @@ public class Pusher {
             System.out.println("source not file");
         }
         Cmd cmd = new Cmd();
-        if (OS.isLINUX()) {
+        if (OS.isLINUX() || OS.isMAC()) {
             cmd.add(Constants.FFMPEG_PATH);
             if (!isFile) {
                 cmd.add("-rtsp_transport");
