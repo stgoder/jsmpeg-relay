@@ -35,8 +35,8 @@ public class Constants {
         if (!pslogDir.exists())
             pslogDir.mkdirs();
 
-        RELAY_SERVER_PORT = (int) myConfig.getOrDefault("relay-server-port", 10017);
-        MPEGTS_SERVER_PORT = (int) myConfig.getOrDefault("mpegts-server-port", 10018);
+        RELAY_SERVER_PORT = (int) myConfig.getOrDefault("relay-server-port", 10047);
+        MPEGTS_SERVER_PORT = (int) myConfig.getOrDefault("mpegts-server-port", 10048);
     }
 
     private Constants() {
