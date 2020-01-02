@@ -58,6 +58,10 @@ public class PlayerGroups {
         });
     }
 
+    public static void removeGroup(String streamId) {
+        playerGroupMap.remove(streamId);
+    }
+
     public static List<StreamB> list() {
         List<StreamB> streams = new ArrayList<>();
         playerGroupMap.forEach((streamId, playerGroup) -> {

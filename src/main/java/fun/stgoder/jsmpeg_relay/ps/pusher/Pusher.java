@@ -5,6 +5,7 @@ import fun.stgoder.jsmpeg_relay.common.OS;
 import fun.stgoder.jsmpeg_relay.common.exception.ExecException;
 import fun.stgoder.jsmpeg_relay.ps.Cmd;
 import fun.stgoder.jsmpeg_relay.ps.Ps;
+import fun.stgoder.jsmpeg_relay.server.relay.PlayerGroups;
 
 import java.io.File;
 import java.util.Collection;
@@ -36,12 +37,13 @@ public class Pusher {
         pushers.put(streamId, pusher);
     }
 
-    public static void stopAndRemove(String key) {
-        Pusher pusher = pushers.get(key);
+    public static void stopAndRemove(String streamId) {
+        Pusher pusher = pushers.get(streamId);
         if (pusher == null)
             return;
         pusher.cleanup();
-        pushers.remove(key);
+        pushers.remove(streamId);
+        PlayerGroups.removeGroup(streamId);
     }
 
     public static Collection<Pusher> pushers() {
