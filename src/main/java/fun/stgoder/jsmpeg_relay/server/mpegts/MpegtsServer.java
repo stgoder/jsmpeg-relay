@@ -2,6 +2,7 @@ package fun.stgoder.jsmpeg_relay.server.mpegts;
 
 import fun.stgoder.jsmpeg_relay.common.Constants;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollChannelOption;
@@ -34,6 +35,9 @@ public class MpegtsServer {
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new MpegtsChannelInitializer());
+        serverBootstrap.option(ChannelOption.SO_SNDBUF, 1024*256);
+        serverBootstrap.option(ChannelOption.SO_RCVBUF, 1024*256);
+        serverBootstrap.option(ChannelOption.TCP_NODELAY, true);
         if (Epoll.isAvailable())
             serverBootstrap.option(EpollChannelOption.SO_REUSEPORT, true);
         this.port = port;
