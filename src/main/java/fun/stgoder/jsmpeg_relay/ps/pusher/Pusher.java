@@ -83,7 +83,7 @@ public class Pusher {
                     .add("mpegts")
                     .add("-codec:v")
                     .add("mpeg1video")
-                    .add("-stats")
+                    .add("-nostats")
                     .add("-r")
                     .add("25")
                     .add("-b:v")
@@ -92,7 +92,7 @@ public class Pusher {
                     .add("640x480")
                     .add("http://127.0.0.1:" + Constants.MPEGTS_SERVER_PORT + "/" + streamId)
                     .add("-loglevel")
-                    .add("fatal");
+                    .add("error");
         }
         if (OS.isWIN()) {
             cmd.add(Constants.FFMPEG_PATH);
@@ -107,7 +107,7 @@ public class Pusher {
                     .add("mpegts")
                     .add("-codec:v")
                     .add("mpeg1video")
-                    .add("-stats")
+                    .add("-nostats")
                     .add("-r")
                     .add("25")
                     .add("-b:v")
@@ -118,7 +118,7 @@ public class Pusher {
                     .add("0")
                     .add("http://127.0.0.1:" + Constants.MPEGTS_SERVER_PORT + "/" + streamId)
                     .add("-loglevel")
-                    .add("0");
+                    .add("error");
         }
         this.ps = new Ps(cmd);
     }
