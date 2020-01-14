@@ -2,7 +2,7 @@ package fun.stgoder.jsmpeg_relay.server.model;
 
 public class ChannelB {
     private String channelId;
-    private boolean alive;
+    private boolean active;
 
     public String getChannelId() {
         return channelId;
@@ -12,11 +12,11 @@ public class ChannelB {
         this.channelId = channelId;
     }
 
-    public boolean isAlive() {
-        return alive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

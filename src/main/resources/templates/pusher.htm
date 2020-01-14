@@ -55,7 +55,7 @@
             <th>cancelAfterSeconds</th>
             <th>birthTime</th>
             <th>upTime</th>
-            <th>stopAndRemove</th>
+            <th>opt</th>
         </tr>
         <tr th:each="pusher : ${pushers}">
             <td><a th:href="@{/pusher/play-jsmpeg/} + ${pusher.streamId}" th:text="${pusher.streamId}"

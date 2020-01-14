@@ -1,6 +1,6 @@
 package fun.stgoder.jsmpeg_relay.server.relay;
 
-import fun.stgoder.jsmpeg_relay.server.model.StreamB;
+import fun.stgoder.jsmpeg_relay.server.model.PlayerStream;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
@@ -62,10 +62,10 @@ public class PlayerGroups {
         playerGroupMap.remove(streamId);
     }
 
-    public static List<StreamB> list() {
-        List<StreamB> streams = new ArrayList<>();
+    public static List<PlayerStream> list() {
+        List<PlayerStream> streams = new ArrayList<>();
         playerGroupMap.forEach((streamId, playerGroup) -> {
-            StreamB streamB = playerGroup.toStreamB();
+            PlayerStream streamB = playerGroup.toStreamB();
             streams.add(streamB);
         });
         return streams;

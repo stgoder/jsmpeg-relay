@@ -1,7 +1,7 @@
 package fun.stgoder.jsmpeg_relay.server.relay;
 
 import fun.stgoder.jsmpeg_relay.server.model.ChannelB;
-import fun.stgoder.jsmpeg_relay.server.model.StreamB;
+import fun.stgoder.jsmpeg_relay.server.model.PlayerStream;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
@@ -62,15 +62,15 @@ public class PlayerGroup {
         }
     }
 
-    public StreamB toStreamB() {
-        StreamB streamB = new StreamB();
+    public PlayerStream toStreamB() {
+        PlayerStream streamB = new PlayerStream();
         List<ChannelB> list = new ArrayList<>();
         channelGroup.iterator().forEachRemaining(channel -> {
             String channelId = channel.id().toString();
             boolean active = channel.isActive();
             ChannelB channelB = new ChannelB();
             channelB.setChannelId(channelId);
-            channelB.setAlive(active);
+            channelB.setActive(active);
             list.add(channelB);
         });
         streamB.setStreamId(streamId);
