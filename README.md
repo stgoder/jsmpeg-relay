@@ -1,2 +1,2 @@
 # jsmpeg-relay
-jsmpeg websocket relay written in java
+jsmpeg websocket relay & mpegts receiver written in java
