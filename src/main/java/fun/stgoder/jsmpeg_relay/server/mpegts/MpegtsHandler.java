@@ -31,7 +31,11 @@ class MpegtsHandler extends SimpleChannelInboundHandler<HttpObject> {
             String uri = ((HttpRequest) msg).uri();
             String streamId = uri.replace("/", "");
             System.out.println("pusher streamId:" + streamId);
-            MpegtsGroup.addChannel(streamId, channel);
+            if (!MpegtsGroup.containsStreamId(streamId)) {
+                MpegtsGroup.addChannel(streamId, channel);
+            } else {
+                ctx.close();
+            }
         }
     }
 
