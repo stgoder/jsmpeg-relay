@@ -2,6 +2,10 @@ package fun.stgoder.jsmpeg_relay.ps.pusher;
 
 import fun.stgoder.jsmpeg_relay.common.Constants;
 import fun.stgoder.jsmpeg_relay.common.OS;
+import fun.stgoder.jsmpeg_relay.common.db.Ds;
+import fun.stgoder.jsmpeg_relay.common.db.Param;
+import fun.stgoder.jsmpeg_relay.common.db.PusherEntity;
+import fun.stgoder.jsmpeg_relay.common.db.Sql;
 import fun.stgoder.jsmpeg_relay.common.exception.ExecException;
 import fun.stgoder.jsmpeg_relay.ps.Cmd;
 import fun.stgoder.jsmpeg_relay.ps.Ps;
@@ -10,6 +14,7 @@ import fun.stgoder.jsmpeg_relay.server.relay.PlayerGroups;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Pusher {
@@ -28,13 +33,26 @@ public class Pusher {
                                    long cancelAfterSeconds) throws ExecException {
         if (pushers.containsKey(streamId))
             return;
+        long now = System.currentTimeMillis();
         Pusher pusher = new Pusher(streamId, source)
                 .keepAlive(keepAlive)
                 .cancelAfterSeconds(cancelAfterSeconds)
                 .pushToJsmpegRelay()
-                .birthTime(System.currentTimeMillis())
-                .upTime(System.currentTimeMillis());
+                .birthTime(now)
+                .upTime(now);
         pushers.put(streamId, pusher);
+        Ds.sqlite0.insert(
+                new Sql()
+                        .insert(PusherEntity.class)
+                        .cols(PusherEntity.BCOLS)
+                        .values(PusherEntity.VALUES).sql(),
+                new Param()
+                        .add("stream_id", streamId)
+                        .add("source", source)
+                        .add("keep_alive", keepAlive)
+                        .add("cancel_after_seconds", cancelAfterSeconds)
+                        .add("birth_time", now)
+                        .add("up_time", now));
     }
 
     public static void stopAndRemove(String streamId) {
@@ -44,6 +62,42 @@ public class Pusher {
         pusher.cleanup();
         pushers.remove(streamId);
         PlayerGroups.removeGroup(streamId);
+        Ds.sqlite0.delete(
+                new Sql()
+                        .delete(PusherEntity.class)
+                        .where("stream_id = :stream_id").sql(),
+                new Param("stream_id", streamId));
+    }
+
+    public static void loadFromDB() {
+        List<PusherEntity> pusherEntities = Ds.sqlite0.select(
+                new Sql()
+                        .select(PusherEntity.COLS)
+                        .from(PusherEntity.class).sql(), PusherEntity.class);
+        for (PusherEntity pusherEntity : pusherEntities) {
+            long now = System.currentTimeMillis();
+            String streamId = pusherEntity.getStreamId();
+            Pusher pusher = new Pusher(streamId, pusherEntity.getSource())
+                    .keepAlive(pusherEntity.isKeepAlive())
+                    .cancelAfterSeconds(pusherEntity.getCancelAfterSeconds())
+                    .birthTime(pusherEntity.getBirthTime())
+                    .upTime(now);
+            try {
+                pusher.pushToJsmpegRelay();
+                pushers.put(streamId, pusher);
+                Ds.sqlite0.update(
+                        new Sql()
+                                .update(PusherEntity.class)
+                                .set("up_time = :up_time")
+                                .where("stream_id = :stream_id").sql(),
+                        new Param()
+                                .add("up_time", now)
+                                .add("stream_id", streamId));
+            } catch (ExecException e) {
+                e.printStackTrace();
+                System.err.println("load pusher: " + streamId + " err");
+            }
+        }
     }
 
     public static Collection<Pusher> pushers() {
@@ -203,8 +257,17 @@ class StatusChecker extends Thread {
                             if (!pusher.isAlive()) {
                                 System.out.println("ps " + streamId + " exited, pull up");
                                 try {
+                                    long now = System.currentTimeMillis();
                                     pusher.pushToJsmpegRelay()
-                                            .upTime(System.currentTimeMillis());
+                                            .upTime(now);
+                                    Ds.sqlite0.update(
+                                            new Sql()
+                                                    .update(PusherEntity.class)
+                                                    .set("up_time = :up_time")
+                                                    .where("stream_id = :stream_id").sql(),
+                                            new Param()
+                                                    .add("up_time", now)
+                                                    .add("stream_id", streamId));
                                 } catch (ExecException e) {
                                     e.printStackTrace();
                                 }

@@ -18,6 +18,10 @@ public class Constants {
     public static final int RELAY_SERVER_PORT;
     public static final int MPEGTS_SERVER_PORT;
 
+    public static final String DS_SQLITE0_DB_FILE_PATH;
+    public static final int DS_SQLITE0_POOL_SIZE;
+    public static final String DS_SQLITE0_POOL_NAME;
+
     static {
         Yaml yaml = new Yaml();
         Map base = yaml.loadAs(Constants.class.getResourceAsStream("/application.yml"), Map.class);
@@ -37,6 +41,14 @@ public class Constants {
 
         RELAY_SERVER_PORT = (int) myConfig.getOrDefault("relay-server-port", 10047);
         MPEGTS_SERVER_PORT = (int) myConfig.getOrDefault("mpegts-server-port", 10048);
+
+        // data source
+        Map ds = (Map) myConfig.get("ds");
+        Map sqlite0 = (Map) ds.get("sqlite0");
+        DS_SQLITE0_DB_FILE_PATH = (String) sqlite0.getOrDefault("db-file-path",
+                "/home/stgoder/jsmpeg-relay/sqlite0.db");
+        DS_SQLITE0_POOL_SIZE = (int) sqlite0.getOrDefault("pool-size", "3");
+        DS_SQLITE0_POOL_NAME = (String) sqlite0.getOrDefault("pool-name", "sqlite0");
     }
 
     private Constants() {
