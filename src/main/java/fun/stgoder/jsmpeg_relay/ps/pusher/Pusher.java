@@ -127,8 +127,10 @@ public class Pusher {
         if (OS.isLINUX() || OS.isMAC()) {
             cmd.add(Constants.FFMPEG_PATH);
             if (!isFile) {
-                cmd.add("-rtsp_transport");
-                cmd.add("tcp");
+                cmd.add("-rtsp_transport")
+                        .add("tcp")
+                        .add("-stimeout")
+                        .add("5000000");
             }
             cmd.add("-re")
                     .add("-i")
@@ -143,16 +145,22 @@ public class Pusher {
                     .add("-b:v")
                     .add("1000k")
                     .add("-s")
-                    .add("640x480")
-                    .add("http://127.0.0.1:" + Constants.MPEGTS_SERVER_PORT + "/" + streamId)
+                    .add("640x480");
+            if (!isFile) {
+                cmd.add("-stimeout")
+                        .add("5000000"); // keep alive
+            }
+            cmd.add("http://127.0.0.1:" + Constants.MPEGTS_SERVER_PORT + "/" + streamId)
                     .add("-loglevel")
                     .add("error");
         }
         if (OS.isWIN()) {
             cmd.add(Constants.FFMPEG_PATH);
             if (!isFile) {
-                cmd.add("-rtsp_transport");
-                cmd.add("tcp");
+                cmd.add("-rtsp_transport")
+                        .add("tcp")
+                        .add("-stimeout")
+                        .add("5000000");
             }
             cmd.add("-re")
                     .add("-i")
@@ -169,8 +177,12 @@ public class Pusher {
                     .add("-s")
                     .add("640x480")
                     .add("-bf")
-                    .add("0")
-                    .add("http://127.0.0.1:" + Constants.MPEGTS_SERVER_PORT + "/" + streamId)
+                    .add("0");
+            if (!isFile) {
+                cmd.add("-stimeout")
+                        .add("5000000"); // keep alive
+            }
+            cmd.add("http://127.0.0.1:" + Constants.MPEGTS_SERVER_PORT + "/" + streamId)
                     .add("-loglevel")
                     .add("error");
         }
@@ -279,7 +291,7 @@ class StatusChecker extends Thread {
                 e.printStackTrace();
             }
             try {
-                sleep(1000 * 5);
+                sleep(1000 * 15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
