@@ -12,7 +12,9 @@
             <th>opt</th>
         </tr>
         <tr th:each="stream : ${streams}">
-            <td th:text="${stream.streamId}"></td>
+            <td>
+                <a th:href="@{/play/jsmpeg/} + ${stream.streamId}" th:text="${stream.streamId}" target="_blank"></a>
+            </td>
             <td th:text="${stream.channelId}"></td>
             <td th:text="${stream.active}"></td>
             <td>

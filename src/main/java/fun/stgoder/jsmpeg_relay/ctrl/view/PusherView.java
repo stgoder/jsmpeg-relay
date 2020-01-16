@@ -1,13 +1,15 @@
 package fun.stgoder.jsmpeg_relay.ctrl.view;
 
-import fun.stgoder.jsmpeg_relay.common.Constants;
 import fun.stgoder.jsmpeg_relay.common.exception.BLException;
 import fun.stgoder.jsmpeg_relay.common.exception.ExecException;
 import fun.stgoder.jsmpeg_relay.ps.model.PusherB;
 import fun.stgoder.jsmpeg_relay.ps.pusher.Pusher;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -49,14 +51,6 @@ public class PusherView {
                                       ModelAndView mv) throws ExecException, BLException {
         mv.setViewName("redirect:/pusher/");
         Pusher.stopAndRemove(streamId);
-        return mv;
-    }
-
-    @GetMapping("/play-jsmpeg/{streamId}")
-    public ModelAndView play(@PathVariable("streamId") String streamId, ModelAndView mv) throws Exception {
-        mv.setViewName("play-jsmpeg");
-        mv.addObject("url", "ws://" + Constants.localIpv4 + ":"
-                + Constants.RELAY_SERVER_PORT + "?streamId=" + streamId);
         return mv;
     }
 }

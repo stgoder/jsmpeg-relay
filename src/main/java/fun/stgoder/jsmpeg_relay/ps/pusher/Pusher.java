@@ -70,34 +70,36 @@ public class Pusher {
     }
 
     public static void loadFromDB() {
-        List<PusherEntity> pusherEntities = Ds.sqlite0.select(
-                new Sql()
-                        .select(PusherEntity.COLS)
-                        .from(PusherEntity.class).sql(), PusherEntity.class);
-        for (PusherEntity pusherEntity : pusherEntities) {
-            long now = System.currentTimeMillis();
-            String streamId = pusherEntity.getStreamId();
-            Pusher pusher = new Pusher(streamId, pusherEntity.getSource())
-                    .keepAlive(pusherEntity.isKeepAlive())
-                    .cancelAfterSeconds(pusherEntity.getCancelAfterSeconds())
-                    .birthTime(pusherEntity.getBirthTime())
-                    .upTime(now);
-            try {
-                pusher.pushToJsmpegRelay();
-                pushers.put(streamId, pusher);
-                Ds.sqlite0.update(
-                        new Sql()
-                                .update(PusherEntity.class)
-                                .set("up_time = :up_time")
-                                .where("stream_id = :stream_id").sql(),
-                        new Param()
-                                .add("up_time", now)
-                                .add("stream_id", streamId));
-            } catch (ExecException e) {
-                e.printStackTrace();
-                System.err.println("load pusher: " + streamId + " err");
+        new Thread(() -> {
+            List<PusherEntity> pusherEntities = Ds.sqlite0.select(
+                    new Sql()
+                            .select(PusherEntity.COLS)
+                            .from(PusherEntity.class).sql(), PusherEntity.class);
+            for (PusherEntity pusherEntity : pusherEntities) {
+                long now = System.currentTimeMillis();
+                String streamId = pusherEntity.getStreamId();
+                Pusher pusher = new Pusher(streamId, pusherEntity.getSource())
+                        .keepAlive(pusherEntity.isKeepAlive())
+                        .cancelAfterSeconds(pusherEntity.getCancelAfterSeconds())
+                        .birthTime(pusherEntity.getBirthTime())
+                        .upTime(now);
+                try {
+                    pusher.pushToJsmpegRelay();
+                    pushers.put(streamId, pusher);
+                    Ds.sqlite0.update(
+                            new Sql()
+                                    .update(PusherEntity.class)
+                                    .set("up_time = :up_time")
+                                    .where("stream_id = :stream_id").sql(),
+                            new Param()
+                                    .add("up_time", now)
+                                    .add("stream_id", streamId));
+                } catch (ExecException e) {
+                    e.printStackTrace();
+                    System.err.println("load pusher: " + streamId + " err");
+                }
             }
-        }
+        }).start();
     }
 
     public static Collection<Pusher> pushers() {

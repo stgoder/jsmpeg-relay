@@ -58,8 +58,9 @@
             <th>opt</th>
         </tr>
         <tr th:each="pusher : ${pushers}">
-            <td><a th:href="@{/pusher/play-jsmpeg/} + ${pusher.streamId}" th:text="${pusher.streamId}"
-                   target="_blank"></a></td>
+            <td>
+                <a th:href="@{/play/jsmpeg/} + ${pusher.streamId}" th:text="${pusher.streamId}" target="_blank"></a>
+            </td>
             <td th:text="${pusher.source}"></td>
             <td th:text="${pusher.keepAlive}"></td>
             <td th:text="${pusher.cancelAfterSeconds}"></td>

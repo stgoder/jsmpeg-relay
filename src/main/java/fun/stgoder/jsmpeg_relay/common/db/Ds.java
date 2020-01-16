@@ -3,6 +3,7 @@ package fun.stgoder.jsmpeg_relay.common.db;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fun.stgoder.jsmpeg_relay.common.Constants;
+import fun.stgoder.jsmpeg_relay.common.exception.BaseException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import java.io.InputStream;
 public class Ds {
     public static BaseDataSource sqlite0;
 
-    public static void initSqlite0() {
+    public static void initSqlite0() throws BaseException {
         try {
             File dbFile = new File(Constants.DS_SQLITE0_DB_FILE_PATH);
             if (!dbFile.exists()) {
@@ -34,10 +35,11 @@ public class Ds {
         } catch (Exception e) {
             System.out.println("init sqlite0: "
                     + Constants.DS_SQLITE0_DB_FILE_PATH + " failed, work without sqlite0 data source");
+            throw new BaseException(-1, "init data source err");
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BaseException {
         Ds.initSqlite0();
         //Ds.sqlite0.dropTableIfExists("pusher");
         //Ds.sqlite0.createTableFromBean(PusherEntity.class);
