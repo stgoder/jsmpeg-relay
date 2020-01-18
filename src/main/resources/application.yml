@@ -45,7 +45,7 @@ myConfig:
   pslog-path: /home/stgoder/jsmpeg-relay/pslog
   relay-server-port: 10047
   mpegts-server-port: 10048
-  local-ipv4: '192.168.1.214'
+  local-ipv4: 192.168.1.214
   ds:
     sqlite0:
       db-file-path: /home/stgoder/jsmpeg-relay/sqlite0.db

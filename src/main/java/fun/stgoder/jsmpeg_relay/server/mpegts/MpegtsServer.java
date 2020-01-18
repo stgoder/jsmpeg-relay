@@ -15,23 +15,23 @@ import io.netty.handler.logging.LoggingHandler;
 
 public class MpegtsServer {
     private final EventLoopGroup bossGroup;
-    private final EventLoopGroup wokerGroup;
+    private final EventLoopGroup workerGroup;
     private final ServerBootstrap serverBootstrap;
     private int port;
 
     {
         if (Epoll.isAvailable()) {
             bossGroup = new EpollEventLoopGroup();
-            wokerGroup = new EpollEventLoopGroup();
+            workerGroup = new EpollEventLoopGroup();
         } else {
             bossGroup = new NioEventLoopGroup();
-            wokerGroup = new NioEventLoopGroup();
+            workerGroup = new NioEventLoopGroup();
         }
         serverBootstrap = new ServerBootstrap();
     }
 
     public MpegtsServer(int port) {
-        serverBootstrap.group(bossGroup, wokerGroup)
+        serverBootstrap.group(bossGroup, workerGroup)
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new MpegtsChannelInitializer());
@@ -58,7 +58,7 @@ public class MpegtsServer {
 
     public MpegtsServer stop() {
         bossGroup.shutdownGracefully();
-        wokerGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
         return this;
     }
 }

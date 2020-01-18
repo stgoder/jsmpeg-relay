@@ -14,23 +14,23 @@ import io.netty.handler.logging.LoggingHandler;
 
 public class RelayServer {
     private final EventLoopGroup bossGroup;
-    private final EventLoopGroup wokerGroup;
+    private final EventLoopGroup workerGroup;
     private final ServerBootstrap serverBootstrap;
     private int port;
 
     {
         if (Epoll.isAvailable()) {
             bossGroup = new EpollEventLoopGroup();
-            wokerGroup = new EpollEventLoopGroup();
+            workerGroup = new EpollEventLoopGroup();
         } else {
             bossGroup = new NioEventLoopGroup();
-            wokerGroup = new NioEventLoopGroup();
+            workerGroup = new NioEventLoopGroup();
         }
         serverBootstrap = new ServerBootstrap();
     }
 
     public RelayServer(int port) {
-        serverBootstrap.group(bossGroup, wokerGroup)
+        serverBootstrap.group(bossGroup, workerGroup)
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new RelayChannelInitializer());
@@ -54,7 +54,7 @@ public class RelayServer {
 
     public RelayServer stop() {
         bossGroup.shutdownGracefully();
-        wokerGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
         return this;
     }
 }
