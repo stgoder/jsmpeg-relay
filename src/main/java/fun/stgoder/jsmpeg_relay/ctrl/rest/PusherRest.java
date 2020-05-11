@@ -1,6 +1,5 @@
 package fun.stgoder.jsmpeg_relay.ctrl.rest;
 
-import fun.stgoder.jsmpeg_relay.common.Code;
 import fun.stgoder.jsmpeg_relay.common.exception.BLException;
 import fun.stgoder.jsmpeg_relay.common.exception.ExecException;
 import fun.stgoder.jsmpeg_relay.common.model.Resp;
@@ -21,7 +20,7 @@ public class PusherRest {
         for (Pusher pusher : Pusher.pushers()) {
             pushers.add(PusherB.fromPusher(pusher));
         }
-        return new Resp(Code.REQUEST_OK, pushers);
+        return Resp.ok(pushers);
     }
 
     @PostMapping("/startAndPut")
@@ -35,12 +34,12 @@ public class PusherRest {
         if (StringUtils.isBlank(source))
             throw new BLException(-1, "source blank");
         Pusher.startAndPut(streamId, source, keepAlive, cancelAfterSeconds);
-        return new Resp(Code.REQUEST_OK);
+        return Resp.ok();
     }
 
     @PostMapping("/stopAndRemove")
     public Resp stopAndRemove(@RequestParam("streamId") String streamId) throws ExecException, BLException {
         Pusher.stopAndRemove(streamId);
-        return new Resp(Code.REQUEST_OK);
+        return Resp.ok();
     }
 }

@@ -35,7 +35,7 @@ public class CtrlAdvice {
                 message = baseException.message();
             }
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-                    .body(new Resp(code, message));
+                    .body(Resp.err(message));
         } else {
             int code = Code.REQUEST_ERR;
             String message = e.getMessage();
