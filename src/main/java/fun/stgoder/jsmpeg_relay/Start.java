@@ -15,10 +15,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class Start {
 
     public static void main(String[] args) throws InterruptedException, BaseException {
+        SpringApplication.run(Start.class, args);
         Ds.initSqlite0();
         new MpegtsServer(Constants.MPEGTS_SERVER_PORT).start();
         new RelayServer(Constants.RELAY_SERVER_PORT).start();
         Pusher.loadFromDB();
-        SpringApplication.run(Start.class, args);
     }
 }
