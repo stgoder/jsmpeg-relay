@@ -34,6 +34,7 @@ public class PusherView {
     @PostMapping("/startAndPut")
     public ModelAndView startAndPut(@RequestParam("streamId") String streamId,
                                     @RequestParam("source") String source,
+                                    @RequestParam("s") String s,
                                     @RequestParam("keepAlive") boolean keepAlive,
                                     @RequestParam(value = "cancelAfterSeconds", required = false, defaultValue = "0")
                                             long cancelAfterSeconds, ModelAndView mv) throws BLException, ExecException {
@@ -42,7 +43,7 @@ public class PusherView {
             throw new BLException(-1, "streamId blank");
         if (StringUtils.isBlank(source))
             throw new BLException(-1, "source blank");
-        Pusher.startAndPut(streamId, source, keepAlive, cancelAfterSeconds);
+        Pusher.startAndPut(streamId, source, s, keepAlive, cancelAfterSeconds);
         return mv;
     }
 

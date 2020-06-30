@@ -48,5 +48,6 @@ class MpegtsHandler extends SimpleChannelInboundHandler<HttpObject> {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
             throws Exception {
         cause.printStackTrace();
+        MpegtsGroup.removeChannel(ctx.channel());
     }
 }

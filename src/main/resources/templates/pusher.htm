@@ -23,6 +23,12 @@
             </tr>
             <tr>
                 <td>
+                    <input type="text" name="s" required="required" placeholder="-s" value="640x480">
+                </td>
+                <td>resolution [-s] 640x480</td>
+            </tr>
+            <tr>
+                <td>
                     <select name="keepAlive">
                         <option value="true" selected>true</option>
                         <option value="false">false</option>
@@ -51,6 +57,7 @@
         <tr>
             <th>streamId</th>
             <th>source</th>
+            <th>-s</th>
             <th>keepAlive</th>
             <th>cancelAfterSeconds</th>
             <th>birthTime</th>
@@ -62,6 +69,7 @@
                 <a th:href="@{/play/jsmpeg/} + ${pusher.streamId}" th:text="${pusher.streamId}" target="_blank"></a>
             </td>
             <td th:text="${pusher.source}"></td>
+            <td th:text="${pusher.s}"></td>
             <td th:text="${pusher.keepAlive}"></td>
             <td th:text="${pusher.cancelAfterSeconds}"></td>
             <td th:text="${#dates.format(pusher.birthTime, 'yyyy-MM-dd HH:mm:ss')}"></td>

@@ -26,6 +26,7 @@ public class PusherRest {
     @PostMapping("/startAndPut")
     public Resp startAndPut(@RequestParam("streamId") String streamId,
                             @RequestParam("source") String source,
+                            @RequestParam("s") String s,
                             @RequestParam("keepAlive") boolean keepAlive,
                             @RequestParam(value = "cancelAfterSeconds", required = false, defaultValue = "0")
                                     long cancelAfterSeconds) throws BLException, ExecException {
@@ -33,7 +34,7 @@ public class PusherRest {
             throw new BLException(-1, "streamId blank");
         if (StringUtils.isBlank(source))
             throw new BLException(-1, "source blank");
-        Pusher.startAndPut(streamId, source, keepAlive, cancelAfterSeconds);
+        Pusher.startAndPut(streamId, source, s, keepAlive, cancelAfterSeconds);
         return Resp.ok();
     }
 

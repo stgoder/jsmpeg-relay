@@ -5,19 +5,22 @@ import fun.stgoder.jsmpeg_relay.common.db.annotation.tbl;
 
 @tbl("pusher")
 public class PusherEntity {
-    public static final String BCOLS = "stream_id, source, keep_alive, cancel_after_seconds, birth_time, up_time";
+    public static final String BCOLS = "stream_id, source, s, keep_alive, cancel_after_seconds, birth_time, up_time";
     public static final String COLS = "stream_id as streamId, " +
             "source, " +
+            "s, " +
             "keep_alive as keepAlive, " +
             "cancel_after_seconds as cancelAfterSeconds, " +
             "birth_time as birthTime, " +
             "up_time as upTime";
-    public static final String VALUES = ":stream_id, :source, :keep_alive, " +
+    public static final String VALUES = ":stream_id, :source, :s, :keep_alive, " +
             ":cancel_after_seconds, :birth_time, :up_time";
     @col(value = "stream_id", pk = true, nn = true)
     private String streamId;
     @col(nn = true, len = 255)
     private String source;
+    @col(nn = true)
+    private String s;
     @col(value = "keep_alive", nn = true)
     private boolean keepAlive;
     @col(value = "cancel_after_seconds", nn = true)
@@ -41,6 +44,14 @@ public class PusherEntity {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
     }
 
     public boolean isKeepAlive() {

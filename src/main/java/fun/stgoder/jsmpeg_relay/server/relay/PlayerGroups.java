@@ -31,6 +31,14 @@ public class PlayerGroups {
         playerGroup.removeChannel(channel);
     }
 
+    public static void removePlayer(Channel channel) {
+        playerGroupMap.forEach((streamId, playerGroup) -> {
+            if (playerGroup != null) {
+                playerGroup.removeChannel(channel);
+            }
+        });
+    }
+
     public static void broadcast(String streamId, ByteBuf message) {
         PlayerGroup playerGroup = playerGroupMap.get(streamId);
         if (playerGroup == null)

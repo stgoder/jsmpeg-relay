@@ -5,6 +5,7 @@ import fun.stgoder.jsmpeg_relay.ps.pusher.Pusher;
 public class PusherB {
     private String streamId;
     private String source;
+    private String s;
     private boolean keepAlive;
     private long cancelAfterSeconds;
     private long birthTime;
@@ -14,6 +15,7 @@ public class PusherB {
         PusherB pusherB = new PusherB();
         pusherB.setStreamId(pusher.streamId());
         pusherB.setSource(pusher.source());
+        pusherB.setS(pusher.s());
         pusherB.setKeepAlive(pusher.keepAlive());
         pusherB.setCancelAfterSeconds(pusher.cancelAfterSeconds());
         pusherB.setBirthTime(pusher.birthTime());
@@ -35,6 +37,14 @@ public class PusherB {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
     }
 
     public boolean isKeepAlive() {

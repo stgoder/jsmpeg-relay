@@ -24,6 +24,7 @@ public class PlayerHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
+        PlayerGroups.removePlayer(ctx.channel());
     }
 
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -43,6 +44,7 @@ public class PlayerHandler extends SimpleChannelInboundHandler<Object> {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
             throws Exception {
         cause.printStackTrace();
+        PlayerGroups.removePlayer(ctx.channel());
     }
 
     private void handleHttpRequest(ChannelHandlerContext ctx,

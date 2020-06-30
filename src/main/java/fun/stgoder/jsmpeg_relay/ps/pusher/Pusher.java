@@ -29,12 +29,13 @@ public class Pusher {
 
     public static void startAndPut(String streamId,
                                    String source,
+                                   String s,
                                    boolean keepAlive,
                                    long cancelAfterSeconds) throws ExecException {
         if (pushers.containsKey(streamId))
             return;
         long now = System.currentTimeMillis();
-        Pusher pusher = new Pusher(streamId, source)
+        Pusher pusher = new Pusher(streamId, source, s)
                 .keepAlive(keepAlive)
                 .cancelAfterSeconds(cancelAfterSeconds)
                 .pushToJsmpegRelay()
@@ -49,6 +50,7 @@ public class Pusher {
                 new Param()
                         .add("stream_id", streamId)
                         .add("source", source)
+                        .add("s", s)
                         .add("keep_alive", keepAlive)
                         .add("cancel_after_seconds", cancelAfterSeconds)
                         .add("birth_time", now)
@@ -78,7 +80,7 @@ public class Pusher {
             for (PusherEntity pusherEntity : pusherEntities) {
                 long now = System.currentTimeMillis();
                 String streamId = pusherEntity.getStreamId();
-                Pusher pusher = new Pusher(streamId, pusherEntity.getSource())
+                Pusher pusher = new Pusher(streamId, pusherEntity.getSource(), pusherEntity.getS())
                         .keepAlive(pusherEntity.isKeepAlive())
                         .cancelAfterSeconds(pusherEntity.getCancelAfterSeconds())
                         .birthTime(pusherEntity.getBirthTime())
@@ -113,10 +115,12 @@ public class Pusher {
     private long cancelAfterSeconds;
     private long birthTime;
     private long upTime;
+    private String s;
 
-    public Pusher(String streamId, String source) {
+    public Pusher(String streamId, String source, String s) {
         this.streamId = streamId;
         this.source = source;
+        this.s = s;
         boolean isFile = false;
         try {
             File file = new File(source);
@@ -147,7 +151,7 @@ public class Pusher {
                     .add("-b:v")
                     .add("1000k")
                     .add("-s")
-                    .add("640x480");
+                    .add(s);
             if (!isFile) {
                 cmd.add("-stimeout")
                         .add("5000000"); // keep alive
@@ -177,7 +181,7 @@ public class Pusher {
                     .add("-b:v")
                     .add("1000k")
                     .add("-s")
-                    .add("640x480")
+                    .add(s)
                     .add("-bf")
                     .add("0");
             if (!isFile) {
@@ -249,6 +253,15 @@ public class Pusher {
 
     public Pusher upTime(long upTime) {
         this.upTime = upTime;
+        return this;
+    }
+
+    public String s() {
+        return s;
+    }
+
+    public Pusher s(String s) {
+        this.s = s;
         return this;
     }
 }
