@@ -41,7 +41,7 @@ logging:
 
 myConfig:
   test-mode: true
-  ffmpeg-path: /home/stgoder/jsmpeg-relay/ffmpeg
+  ffmpeg-path: /home/stgoder/jsmpeg-relay/ffmpeg.win
   pslog-path: /home/stgoder/jsmpeg-relay/pslog
   relay-server-port: 10047
   mpegts-server-port: 10048
