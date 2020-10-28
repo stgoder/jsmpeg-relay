@@ -10,6 +10,7 @@ import fun.stgoder.jsmpeg_relay.common.exception.ExecException;
 import fun.stgoder.jsmpeg_relay.ps.Cmd;
 import fun.stgoder.jsmpeg_relay.ps.Ps;
 import fun.stgoder.jsmpeg_relay.server.relay.PlayerGroups;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Collection;
@@ -149,9 +150,11 @@ public class Pusher {
                     .add("-r")
                     .add("25")
                     .add("-b:v")
-                    .add("1000k")
-                    .add("-s")
-                    .add(s);
+                    .add("1000k");
+            if (StringUtils.isNotBlank(s)) {
+                cmd.add("-s")
+                        .add(s);
+            }
             if (!isFile) {
                 cmd.add("-stimeout")
                         .add("5000000"); // keep alive
@@ -179,10 +182,12 @@ public class Pusher {
                     .add("-r")
                     .add("25")
                     .add("-b:v")
-                    .add("1000k")
-                    .add("-s")
-                    .add(s)
-                    .add("-bf")
+                    .add("1000k");
+            if (StringUtils.isNotBlank(s)) {
+                cmd.add("-s")
+                        .add(s);
+            }
+            cmd.add("-bf")
                     .add("0");
             if (!isFile) {
                 cmd.add("-stimeout")
